@@ -7,10 +7,10 @@ from apps.scraper.models import BrowseAppsPageHtml
 
 class HTMLScraper:
 
-    def scrape_page(self):
+    def scrape_page(self, start_page_no, last_page_no):
         client = self.get_client()
         url = self.get_url()
-        for page in range(1, 6):
+        for page in range(start_page_no, last_page_no+1):
             try:
                 print('page_no=', page)
                 url_with_page_no = f'{url}?page={str(page)}'
@@ -24,17 +24,11 @@ class HTMLScraper:
             except Exception as e:
                 print('EXCEPTION: ', str(e))
 
-        # response_obj = client.get(
-        #     url_with_page_no,
-        # )
         print('SCRAPING COMPLETE')
         return
 
     def get_client(self):
-        print('99999999999 inside CLIENT')
         return ScrapingBeeClient(api_key=os.environ['SCRAPING_BEE_API_KEY'])
 
     def get_url(self):
-        # return 'https%3A%2F%2Fapps.shopify.com%2Fbrowse'
-        print('99999999999 inside get_url')
         return 'https://apps.shopify.com/browse'
