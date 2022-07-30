@@ -2,14 +2,33 @@ import os
 
 from scrapingbee import ScrapingBeeClient
 
+from apps.scraper.models import BrowseAppsPageHtml
+
 
 class HTMLScraper:
 
     def scrape_page(self):
-        response_obj = self.get_client().get(
-            self.get_url(),
-        )
-        return response_obj
+        client = self.get_client()
+        url = self.get_url()
+        for page in range(1, 6):
+            try:
+                print('page_no=', page)
+                url_with_page_no = f'{url}?page={str(page)}'
+                response_object = client.get(
+                    url_with_page_no,
+                )
+                BrowseAppsPageHtml.objects.create(
+                    page_no=page,
+                    content=response_object.content
+                )
+            except Exception as e:
+                print('EXCEPTION: ', str(e))
+
+        # response_obj = client.get(
+        #     url_with_page_no,
+        # )
+        print('SCRAPING COMPLETE')
+        return
 
     def get_client(self):
         print('99999999999 inside CLIENT')
