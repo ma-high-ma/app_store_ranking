@@ -18,4 +18,4 @@ class ShopifyAppsAdmin(admin.ModelAdmin):
 @admin.register(AppDelta)
 class AppDeltaAdmin(admin.ModelAdmin):
     list_display = ('id', 'app_name', 'previous_rank', 'new_rank', 'rank_delta', 'created_at')
-    ordering = ('-created_at',)
+    ordering = ('rank_delta',)
