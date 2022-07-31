@@ -8,7 +8,6 @@ from django.utils.timezone import make_aware
 
 from rest_framework.views import APIView
 
-
 # def index(request):
 #     template = loader.get_template('index.html')
 #     return HttpResponse(template.render())
@@ -20,6 +19,15 @@ class AppRankingView(APIView):
     template_name = 'index.html'
 
     def get(self, request):
+        return Response()
+
+
+class AppRankingResponseView(APIView):
+    # renderer_classes = (TemplateHTMLRenderer,)
+    # template_name = 'index.html'
+
+    def get(self, request):
+        print('HEYYYYYY')
         app_name = request.GET.get('app_name')
         dev_by = request.GET.get('dev_by')
         start_date = request.GET.get('start_date', '2022-07-22')
@@ -28,14 +36,13 @@ class AppRankingView(APIView):
         start_date = AppRankingService.convert_time_to_datetime(start_date)
         end_date = AppRankingService.convert_time_to_datetime(end_date)
         end_date = end_date + timedelta(days=1)
-        img = AppRankingService().get_app_rank_data(
+        result = AppRankingService().get_app_rank_data(
             app_name=app_name,
             dev_by=dev_by,
             start_date=start_date,
             end_date=end_date
         )
-
-        return Response()
-
-# class AppRankingResponseView(APIView):
-#
+        result = {
+            "result": result
+        }
+        return Response(data=result)

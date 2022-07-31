@@ -5,24 +5,28 @@ import datetime
 class AppRankingService:
     def get_app_rank_data(self, app_name, dev_by, start_date, end_date):
         print('hey am inside the service file')
-        # shopify_app_obj = ShopifyApps.objects.filter(name=app_name).first()
-        # print('shopify obj = ', shopify_app_obj)
-        # app_delta_qs = AppDelta.objects.filter(app_name=shopify_app_obj, created_at__in=(start_date, end_date))
-        # app_delta_qs = AppDelta.objects.filter(app__name=app_name, created_at__range=[start_date, end_date])
-        # print('app_delta_qs = ', app_delta_qs)
-        # for app in app_delta_qs:
-        #     print(app.__dict__)
-        #     print('-----------------------------')
 
+        result = []
         shopify_apps_rank = ShopifyApps.objects.filter(
             name=app_name,
             developed_by=dev_by,
             created_at__range=[start_date, end_date]
         ).values_list('rank', 'created_at')
         for i in shopify_apps_rank:
-            print(i)
+            x = {
+                'app_name': app_name,
+                'dev_by': dev_by,
+                'rank': i[0],
+                'created_at': i[1]
+            }
+            result.append(x)
+        print('RESULT = ', result)
+
         print('Ranks = ', shopify_apps_rank)
-        return self.plot_graph(qs=shopify_apps_rank, app_name=app_name)
+        return result
+
+        # return self.plot_graph(qs=shopify_apps_rank, app_name=app_name)
+
 
     def plot_graph(self, qs, app_name):
         ranks = list(map(lambda d: d[0], qs))
