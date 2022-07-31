@@ -13,7 +13,12 @@ class ShopifyApps(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     signifiers = models.JSONField(default=dict)
     extras = models.JSONField(default=dict)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
     class Meta:
-        unique_together = ('name', 'developed_by')
+        unique_together = ('name', 'developed_by', 'created_at')
+
+

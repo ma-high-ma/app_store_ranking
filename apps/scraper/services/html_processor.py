@@ -1,4 +1,6 @@
 # from html.parser import HTMLParser
+import datetime
+
 from bs4 import BeautifulSoup
 
 from apps.scraper.models import BrowseAppsPageHtml, ShopifyApps
@@ -29,50 +31,17 @@ class HTMLProcessor:
             reviews_count_str = app_card.find('span', {'class': 'ui-review-count-summary'}).text
             reviews_count = int(reviews_count_str.split('reviews')[0][1:])
 
-            app_data = {
-                'name': app_name,
-                'developed_by': developed_by,
-                'rank': rank,
-                'pricing_format': pricing_format,
-                'reviews_rating': reviews_rating,
-                'reviews_count': reviews_count,
-            }
-
-            shopify_app_obj = ShopifyApps.objects.filter(
+            ShopifyApps.objects.update_or_create(
                 name=app_name,
-                developed_by=developed_by
-            ).first()
-            if shopify_app_obj is not None:
-                if shopify_app_obj.rank != rank:
-                    print('change detected in app = ', app_name)
-                    new_details = {
-                        'reviews_rating': reviews_rating,
-                        'reviews_count': reviews_count,
-                    }
-                    old_details = {
-                        'reviews_rating': shopify_app_obj.reviews_rating,
-                        'reviews_count': shopify_app_obj.reviews_count,
-                        'signifiers': shopify_app_obj.signifiers,
-                        'extras': shopify_app_obj.extras
-                    }
-                    # make an entry in the table
-                    AppDelta.objects.create(
-                        app_name=app_name,
-                        previous_rank=shopify_app_obj.rank,
-                        new_rank=rank,
-                        app_previous_details=old_details,
-                        app_new_details=new_details
-                    )
-                shopify_app_obj.update(**app_data)
-                shopify_app_obj.save()
-
-            else:
-                print('no change in app = ', app_name)
-                ShopifyApps.objects.create(
-                    **app_data
-                )
-
-
+                developed_by=developed_by,
+                created_at=datetime.date.today(),
+                defaults={
+                    'rank': rank,
+                    'pricing_format': pricing_format,
+                    'reviews_rating': reviews_rating,
+                    'reviews_count': reviews_count,
+                }
+            )
 
     def process(self):
         all_pages = BrowseAppsPageHtml.objects.all()
