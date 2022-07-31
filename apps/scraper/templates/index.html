@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Check Ranking Delta for an App</h1>
+
+<form action="/scraper/app-ranking/" method="get" target="_blank">
+    <label for="fname">App Name</label>
+    <input type="text" id="app_name" name="app_name"><br><br>
+
+    <label for="fname">Developed By</label>
+    <input type="text" id="dev_by" name="dev_by"><br><br>
+
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date"><br><br>
+
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+<p>Click on the submit button, and the input will be sent to a page on the server called "action_page.php".</p>
+
+</body>
+</html>
+
+{#/scraper/app-ranking/app_store_ranking/static/graph.png#}

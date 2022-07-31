@@ -21,25 +21,14 @@ class AppDeltaProcessor:
         print("today's apps = ", shopify_apps_scraped_today)
         shopify_apps_scraped_yesterday = ShopifyApps.objects.filter(created_at=today - timedelta(days=1))
         print("yesterday's apps = ", shopify_apps_scraped_yesterday)
-        # for app_today in shopify_apps_scraped_today:
-        #     app_yesterday = shopify_apps_scraped_yesterday.filter(name=app_today.name).first()
-        #     if app_yesterday is not None:
-        #         if app_today.rank != app_yesterday.rank:
-        #             AppDelta.objects.create(
-        #                 app_name=app_today.name,
-        #                 previous_rank=app_yesterday.rank,
-        #                 new_rank=app_today.rank,
-        #                 app_previous_details=self.get_app_details(app_yesterday),
-        #                 app_new_details=self.get_app_details(app_today)
-        #             )
 
         for app_yesterday in shopify_apps_scraped_yesterday:
-            app_today = shopify_apps_scraped_today.filter(name=app_yesterday.name).first()
+            app_today = shopify_apps_scraped_today.filter(name=app_yesterday.name, developed_by=app_yesterday.developed_by).first()
             if not app_today:
                 # App was present in scraped page yesterday, but it in not present in the scraped page today
                 # Then we can say the rank of the app > 24 * no_of_pages_scraped_since_page_1
                 # The rank of these apps is considered 999999
-                print('This app existed yesterday, not today. Name = ', app_yesterday.name)
+                print('This app existed yesterday, not today. Name = ', app_yesterday.name, 'Dev by = ', app_yesterday.developed_by)
                 ShopifyApps.objects.create(
                     name=app_yesterday.name,
                     developed_by=app_yesterday.developed_by,
@@ -50,7 +39,7 @@ class AppDeltaProcessor:
                 if app_yesterday.rank != app_today.rank:
                     print('Rank changed for this app = ', app_today.name)
                     AppDelta.objects.create(
-                        app_name=app_today,
+                        app=app_today,
                         previous_rank=app_yesterday.rank,
                         new_rank=app_today.rank,
                         rank_delta=(app_today.rank-app_yesterday.rank),

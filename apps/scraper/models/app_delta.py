@@ -5,7 +5,7 @@ from apps.scraper.models import ShopifyApps
 
 
 class AppDelta(models.Model):
-    app_name = models.ForeignKey(ShopifyApps, on_delete=models.CASCADE)
+    app = models.ForeignKey(ShopifyApps, on_delete=models.CASCADE)
     previous_rank = models.FloatField()
     new_rank = models.FloatField()
     rank_delta = models.FloatField(default=0.0)
