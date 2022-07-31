@@ -11,7 +11,7 @@ class BrowseAppsPageHtmlAdmin(admin.ModelAdmin):
 
 @admin.register(ShopifyApps)
 class ShopifyAppsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'rank', 'reviews_count', 'reviews_rating', 'modified_at')
+    list_display = ('id', 'name', 'rank', 'reviews_count', 'reviews_rating', 'created_at')
     ordering = ('rank',)
 
 

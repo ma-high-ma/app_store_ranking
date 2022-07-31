@@ -7,7 +7,12 @@ from apps.scraper.models import BrowseAppsPageHtml
 
 class HTMLScraper:
 
+    def remove_all_html_objects(self):
+        BrowseAppsPageHtml.objects.all().delete()
+        print('Deleted all current html data')
+
     def scrape_page(self, start_page_no, last_page_no):
+        self.remove_all_html_objects()
         client = self.get_client()
         url = self.get_url()
         for page in range(start_page_no, last_page_no+1):

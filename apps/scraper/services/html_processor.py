@@ -72,18 +72,7 @@ class HTMLProcessor:
                     **app_data
                 )
 
-            # obj, created = ShopifyApps.objects.update_or_create(
-            #     name=app_name,
-            #     developed_by=developed_by,
-            #     defaults={
-            #         'rank': rank,
-            #         'pricing_format': pricing_format,
-            #         'reviews_rating': reviews_rating,
-            #         'reviews_count': reviews_count
-            #     }
-            # )
-            # if not created:
-            #     print('something changed')
+
 
     def process(self):
         all_pages = BrowseAppsPageHtml.objects.all()
